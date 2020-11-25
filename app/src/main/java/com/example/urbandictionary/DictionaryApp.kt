@@ -25,7 +25,7 @@ class DictionaryApp : Application() {
 
     val moduleOne = module{
         single { Repository() }
-        viewModel { DefinitionViewModel(get()) }
+        viewModel { DefinitionViewModel() }
     }
 
 }

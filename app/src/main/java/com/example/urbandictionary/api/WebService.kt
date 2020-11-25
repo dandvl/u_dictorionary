@@ -1,7 +1,8 @@
 package com.example.urbandictionary.api
 
 import com.example.urbandictionary.data.Definition
-import com.example.urbandictionary.data.HttpResponse
+import com.example.urbandictionary.data.DefintionResponse
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -19,7 +20,7 @@ interface WordService{
 
     @Headers("x-rapidapi-key:4e8ac41cbcmsh88f87a280b8645ap195422jsn388adcc0e397")
     @GET("define")
-    suspend fun findTerm(@Query("term") term : String) : HttpResponse<Definition>
+    suspend fun searchTerm(@Query("term") term : String) : Response<DefintionResponse<Definition>>
 
 }
 
