@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sort_by"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_order_default"
         android:layout_width="@dimen/dimen_0"
         android:layout_height="@dimen/dimen_60"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/order_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_order_downvotes" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_order_upvotes"
         android:layout_width="@dimen/dimen_0"
         android:layout_height="@dimen/dimen_60"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/order_upvotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_order_default" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_order_downvotes"
         android:layout_width="@dimen/dimen_0"
         android:layout_height="@dimen/dimen_60"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/order_downvotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

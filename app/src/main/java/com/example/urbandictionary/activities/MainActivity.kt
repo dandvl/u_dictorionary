@@ -2,25 +2,37 @@ package com.example.urbandictionary.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.SearchView
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.urbandictionary.DefinitionAdapter
 import com.example.urbandictionary.R
+import com.example.urbandictionary.databinding.ActivityMainBinding
 import com.example.urbandictionary.fragments.OrderBottomSheet
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private var  definitionAdapter = DefinitionAdapter()
 
-    private lateinit var definitionsViewModel : DefinitionViewModel
+    private val definitionsViewModel : DefinitionViewModel by viewModel()
+
+    private lateinit var binding : ActivityMainBinding
+
+    private var orderBottomSheet = OrderBottomSheet()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        definitionsViewModel = ViewModelProviders.of(this).get(DefinitionViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
+        binding.definitionVM = definitionsViewModel
+
+        sv_term.isIconified = false
+        sv_term.requestFocus()
 
         definitionsViewModel.definitionsListLD.observe(this, Observer { definitionsList ->
             if(definitionsList?.isNotEmpty() == true) {
@@ -36,16 +48,24 @@ class MainActivity : AppCompatActivity() {
             adapter = definitionAdapter
         }
 
-        btn_search.setOnClickListener {
-            definitionsViewModel.searchTerm(edt_term.text.toString())
-        }
-
         btn_order_by.setOnClickListener {
-            OrderBottomSheet().apply {
+            orderBottomSheet.apply {
                 show(supportFragmentManager,"")
             }
         }
 
+        sv_term.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        query?.let {
+            definitionsViewModel.searchTerm(it)
+        }
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return false
     }
 
 }

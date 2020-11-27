@@ -31,6 +31,7 @@ class DefinitionAdapter : RecyclerView.Adapter<DefinitionAdapter.DefinitionVH>()
     }
 
     private val callback = object : DiffUtil.ItemCallback<Definition>(){
+        //TODO implement this
         override fun areItemsTheSame(oldItem: Definition, newItem: Definition) = false //oldItem.defid == newItem.defid
 
         override fun areContentsTheSame(oldItem: Definition, newItem: Definition) = false //oldItem.definition == newItem.definition

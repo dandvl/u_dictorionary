@@ -3,4 +3,8 @@
     <string name="order_default">Default</string>
     <string name="order_upvotes">Upvotes</string>
     <string name="order_downvotes">Downvotes</string>
+    <string name="search">search</string>
+    <string name="filter">filter</string>
+    <string name="type_any_word">Type any word...</string>
+    <string name="sort_by">Sort by</string>
 </resources>

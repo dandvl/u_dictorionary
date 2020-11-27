@@ -4,17 +4,17 @@ import android.util.Log
 import com.example.urbandictionary.data.Definition
 import com.example.urbandictionary.data.DefintionResponse
 
-class Repository {
+class Repository(private val webService : WebService) : IRepository {
 
-    suspend fun searchTerm(term : String) : DefintionResponse<Definition>? {
+    override suspend fun searchTerm(term : String) : DefintionResponse<Definition>? {
 
-        if(term.isEmpty()){
-            throw Exception("Introduce a term to be found")
+        if(term == ""){
+            throw IllegalArgumentException("Term was not found")
         }
 
         var listDefinitions : DefintionResponse<Definition>? = null
         try {
-            val response = WebService.words.searchTerm(term)
+            val response = webService.words.searchTerm(term)
             if(response.isSuccessful){
                 listDefinitions = response.body()
             }else if (response.errorBody() != null){
