@@ -19,6 +19,8 @@ class Repository(private val webService : WebService) : IRepository {
                 listDefinitions = response.body()
             }else if (response.errorBody() != null){
                 Log.e("RMC", "error ${response.errorBody()}")
+            }else{
+                Log.e("RMC", "something else")
             }
         }catch(e : Exception){
             Log.i("RMC", "exception")

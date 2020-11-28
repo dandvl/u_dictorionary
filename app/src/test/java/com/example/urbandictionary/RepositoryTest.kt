@@ -2,43 +2,56 @@ package com.example.urbandictionary
 
 import com.example.urbandictionary.api.Repository
 import com.example.urbandictionary.api.WebService
+import com.example.urbandictionary.api.WordService
+import com.example.urbandictionary.data.Definition
+import com.example.urbandictionary.data.DefintionResponse
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.koinApplication
-import org.koin.dsl.module
-import org.koin.test.KoinTest
+import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import java.lang.IllegalArgumentException
+import org.mockito.junit.MockitoJUnitRunner
+import retrofit2.Response
+import java.io.BufferedReader
+import java.io.File
 
-class RepositoryTest : KoinTest {
+@RunWith(MockitoJUnitRunner::class)
+class RepositoryTest {
 
-//    private val SampleModule = module {
-//        single { WebService }
-//        single { Repository(get()) }
-//
-//        val mockedContext = mock(Context::class.java)
-//
-//
-//        val koin = koinApplication {
-//            androidContext(mockedContext)
-//            modules(SampleModule)
-//        }.koin
-//
-//    }
+    @Mock
+    private lateinit var webService : WebService
 
+    @Mock
+    private lateinit var words : WordService
 
     @Test(expected = IllegalArgumentException::class)
-    fun `empty String should throw exception`() = runBlocking {
+    fun `empty String should throw exception`() = runBlocking<Unit> {
+        val fakeWebService = mock(WebService::class.java)
+        Repository(fakeWebService).searchTerm("")
+    }
 
-        val webService: WebService = mock(WebService::class.java)
+    @Test
+    fun `term String should retrieve results`() = runBlocking {
+        val term = "air"
 
-        val term = "hello"
+        val jsonPath = javaClass.classLoader?.getResource("fakeTerms.json")?.path
+        val jsonBuffered: BufferedReader = File(jsonPath!!).bufferedReader()
+        val jsonStr = jsonBuffered.use { it.readText() }
 
-//        `when`(webService.words.searchTerm(term)).thenReturn()
+        val collectionType = object : TypeToken<DefintionResponse<Definition>>() {}.type
+        val fakeResponse: DefintionResponse<Definition> = GsonBuilder().create().fromJson(jsonStr, collectionType)
+        
+        val retrofitResponse = Response.success(fakeResponse)
 
+        `when`(webService.words).thenReturn(words)
+        `when`(words.searchTerm(term)).thenReturn(retrofitResponse)
         val res = Repository(webService).searchTerm(term)
+
+        assertEquals(2, res?.list?.size)
     }
 
 }
