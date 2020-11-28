@@ -1,6 +1,7 @@
 package com.example.urbandictionary.activities
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,37 +12,41 @@ import kotlinx.coroutines.launch
 
 class DefinitionViewModel(private val repository  : Repository) : ViewModel() {
 
-    var definitionsListLD = MutableLiveData<List<Definition>>()
-    var loadingLD = MutableLiveData<Boolean>()
+    private var _definitionsListLD = MutableLiveData<List<Definition>>()
+    var definitionsListLD : LiveData<List<Definition>> = _definitionsListLD
+
+    private var _loadingLD = MutableLiveData<Boolean>()
+    var loadingLD : LiveData<Boolean> = _loadingLD
+
     private var listNoSorted : List<Definition>? = null
 
     init {
-        definitionsListLD.value = mutableListOf()
-        loadingLD.value = false
+        _definitionsListLD.value = mutableListOf()
+        _loadingLD.value = false
     }
 
-    fun searchTerm(term : String, sort : String = "") = viewModelScope.launch{
+    fun searchTerm(term : String) = viewModelScope.launch{
         try{
-            loadingLD.value = true
-            definitionsListLD.value = repository.searchTerm(term)?.list
-            listNoSorted = definitionsListLD.value?.toMutableList()
+            _loadingLD.value = true
+            _definitionsListLD.value = repository.searchTerm(term)?.list
+            listNoSorted = _definitionsListLD.value?.toMutableList()
         }catch(exc : Exception){
             Log.i("RMC", "Error!!")
         }finally {
-            loadingLD.value = false
+            _loadingLD.value = false
         }
     }
 
     fun sortByDownvotes(){
-        definitionsListLD.value = definitionsListLD.value?.sortedByDescending { it.thumbs_down }
+        _definitionsListLD.value = _definitionsListLD.value?.sortedByDescending { it.thumbs_down }
     }
 
     fun sortByUpvotes(){
-        definitionsListLD.value = definitionsListLD.value?.sortedByDescending { it.thumbs_up }
+        _definitionsListLD.value = _definitionsListLD.value?.sortedByDescending { it.thumbs_up }
     }
 
     fun originalList(){
-        definitionsListLD.value = listNoSorted
+        _definitionsListLD.value = listNoSorted
     }
 
 
