@@ -48,6 +48,4 @@ class DefinitionViewModel(private val repository  : Repository) : ViewModel() {
     fun originalList(){
         _definitionsListLD.value = listNoSorted
     }
-
-
 }

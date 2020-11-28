@@ -54,4 +54,8 @@ class RepositoryTest {
         assertEquals(2, res?.list?.size)
     }
 
+    //TODO test 500 response
+    //TODO no connection
+
+
 }
